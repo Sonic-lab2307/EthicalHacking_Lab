@@ -67,8 +67,40 @@ Result:
 
 If you go here without any errors, then your environment is ready to fuzz...
 
-## Screenshot
-![Project Screenshot](screenshot.png)
+## Fuzzing
+To fuzz Xpdf with AFL++, we needed to compile Xpdf with instrumentation so that AFL++ could track coverage. The fuzzing setup consisted of the following steps:
+
+First of all, we’re going to clean all previously compiled object files and executables
+```
+rm -r $HOME/fuzzing_xpdf/install
+cd $HOME/fuzzing_xpdf/xpdf-3.02/
+make clean
+```
+
+And now we’re going to build xpdf using the afl-clang-fast compiler. Refer [Fuzzing in Depth - AFL++ Documentation](https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md) for more compiler selection
+```
+export LLVM_CONFIG="llvm-config-16"
+CC=$HOME/AFLplusplus/afl-clang-fast CXX=$HOME/AFLplusplus/afl-clang-fast++ ./configure --prefix="$HOME/fuzzing_xpdf/install/"
+make
+make install
+```
+Now, you can run the fuzzer with the following command:
+```
+afl-fuzz -i $HOME/fuzzing_xpdf/pdf_examples/ -o $HOME/fuzzing_xpdf/out/ -s 123 -- $HOME/fuzzing_xpdf/install/bin/pdftotext @@ $HOME/fuzzing_xpdf/output
+```
+Explanation of each option:
+-i Specifies the directory for input cases (example files)
+-o Specifies the directory where AFL++ will store mutated files
+-s Sets a static random seed for reproducibility
+@@ A placeholder in the target’s command line that AFL replaces with each input file name
+
+Essentially, the fuzzer will execute:/home/kali/fuzzing_xpdf/install/bin/pdftotext <input-file-name> /home/kali/fuzzing_xpdf/outputfor each input file.
+
+Depending on the power of your virtual machine, you will see the first hangs and crashes over time
+You will see the ‘saved crashes’ value in red, indicating the number of crashes found. These crash files are stored in the /home/kali/fuzzing_xpdf/out/ directory. You can stop the fuzzer after finding the first crash by press Ctrl+C
+
+![Fuzz result](Pictures/Fuzz_result.png)
+
 
 ## Notes
 <details>
@@ -78,3 +110,4 @@ If you go here without any errors, then your environment is ready to fuzz...
 
 ## Reference
 Thanks to Antonio Morales for publishing the original materials on GitHub
+
