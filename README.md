@@ -95,14 +95,15 @@ Explanation of each option:
 * -s Sets a static random seed for reproducibility
 * @@ A placeholder in the target’s command line that AFL replaces with each input file name
 
-Essentially, the fuzzer will execute:/home/kali/fuzzing_xpdf/install/bin/pdftotext <input-file-name> /home/kali/fuzzing_xpdf/outputfor each input file.
+Essentially, the fuzzer will execute:$HOME/fuzzing_xpdf/install/bin/pdftotext <input-file-name> $HOME/fuzzing_xpdf/output for each input file.
 
-Depending on the power of your virtual machine, you will see the first hangs and crashes over time
-You will see the ‘saved crashes’ value in red, indicating the number of crashes found. These crash files are stored in the /home/kali/fuzzing_xpdf/out/ directory. You can stop the fuzzer after finding the first crash by press Ctrl+C
+Depending on the power of your virtual machine, you will see the first hangs and crashes over time.
+You will see the ‘saved crashes’ value in red, indicating the number of crashes found. These crash files are stored in the $HOME/fuzzing_xpdf/out/ directory. You can stop the fuzzer after finding the first crash by press Ctrl+C.
 
 ![Fuzz result](Pictures/Fuzz_result.png)
 
-How to Reproduce the Crash
+## How to Reproduce the Crash
+
 To reproduce the crash, locate the file corresponding to the crash in the $HOME/fuzzing_xpdf/out/default/crashes directory.
 
 In my case, the crash filename is id:000000,sig:11,src:000000,time:274008,execs:87328,op:havoc,rep:2
@@ -112,6 +113,30 @@ $HOME/fuzzing_xpdf/install/bin/pdftotext "$HOME/fuzzing_xpdf/out/default/crashes
 ```
 ![Crash](Pictures/Crash.png)
 
+## Triage crash with GDB debugger
+First of all, you need to rebuild Xpdf with debug info to get a symbolic stack trace:
+```
+rm -r $HOME/fuzzing_xpdf/install
+cd $HOME/fuzzing_xpdf/xpdf-3.02/
+make clean
+CFLAGS="-g -O0" CXXFLAGS="-g -O0" ./configure --prefix="$HOME/fuzzing_xpdf/install/"
+make
+make install
+```
+Now, you can run GDB:
+
+```
+gdb --args $HOME/fuzzing_xpdf/install/bin/pdftotext $HOME/fuzzing_xpdf/out/default/crashes/<your_filename> $HOME/fuzzing_xpdf/output
+```
+And then, type inside GDB:
+```
+ >> run
+```
+In my case, the output is:
+![GDB](Pictures/GDB_run.png)
+
+Then type `bt` to get the backtrace:
+![Backtrace](Pictures/Backtrace.png)
 
 ## Notes
 <details>
