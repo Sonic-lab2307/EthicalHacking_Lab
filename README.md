@@ -27,7 +27,45 @@ afl-fuzz
     ![AFL++](Pictures/AFL_setup_verify.png)
   
 2. Setup XPDF 3.02
+* Create a new directory for the project you want to fuzz:
+```
+cd $HOME
+mkdir fuzzing_xpdf && cd fuzzing_xpdf/
+```
+* Install additional tools
+```
+sudo apt install build-essential
+```
+* Download Xpdf 3.02
+```
+wget https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz
+tar -xvzf xpdf-3.02.tar.gz
+```
+* Verify Xpdf installation with example pdf file
+```
+cd xpdf-3.02
+sudo apt update && sudo apt install -y build-essential gcc
+./configure --prefix="$HOME/fuzzing_xpdf/install/"
+make
+make install
+```
+```
+cd $HOME/fuzzing_xpdf
+mkdir pdf_examples && cd pdf_examples
+wget https://www.melbpc.org.au/wp-content/uploads/2017/10/small-example-pdf-file.pdf
+```
+```
+$HOME/fuzzing_xpdf/install/bin/pdfinfo -box -meta $HOME/fuzzing_xpdf/pdf_examples/small-example-pdf-file.pdf
+```
+Explanation:
+- pdfinfo: A binary file to extract information from PDF files
+- box: Displays information about page dimensions and media boxes
+- meta: Reveals embedded metadata about the document
 
+Result:
+![XPDF](Pictures/XPDF_setup_verify.png)
+
+If you go here without any errors, then your environment is ready to fuzz...
 
 ## Screenshot
 ![Project Screenshot](screenshot.png)
