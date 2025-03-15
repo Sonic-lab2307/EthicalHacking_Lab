@@ -24,10 +24,7 @@ sudo make install
 afl-fuzz
 ```
   * The parameter set
-  <details>
-  <summary>Click to expand</summary>
-  ![AFL++](Pictures/AFL_setup_verify.png)
-  </details> 
+    ![AFL++](Pictures/AFL_setup_verify.png)
   
 2. Setup XPDF 3.02
 
