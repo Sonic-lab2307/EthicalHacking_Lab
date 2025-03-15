@@ -11,7 +11,7 @@ The goal is to reproduce a crash for CVE-2019-13288 in XPDF 3.02.
 1. AFL++
 The fuzzing exercise was conducted on a Kali Linux system
 
-Install AFL++
+* Install AFL++:
 ```
 git clone https://github.com/AFLplusplus/AFLplusplus.git
 cd AFLplusplus
@@ -19,12 +19,16 @@ make distrib
 sudo make install
 ```
 
-Verify AFL++ setup
+* Verify AFL++ setup by:
 ```
 afl-fuzz
 ```
-![AFL++](Pictures/AFL_setup_verify.png)
-
+  * The parameter set
+  <details>
+  <summary>Click to expand</summary>
+  ![AFL++](Pictures/AFL_setup_verify.png)
+  </details> 
+  
 2. Setup XPDF 3.02
 
 
