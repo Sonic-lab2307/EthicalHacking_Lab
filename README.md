@@ -68,6 +68,10 @@ Result:
 If you go here without any errors, then your environment is ready to fuzz...
 
 ## Fuzzing
+
+<details>
+  <summary>Click to expand</summary>
+
 To fuzz Xpdf with AFL++, we needed to compile Xpdf with instrumentation so that AFL++ could track coverage. The fuzzing setup consisted of the following steps:
 
 First of all, we’re going to clean all previously compiled object files and executables
@@ -138,11 +142,8 @@ In my case, the output is:
 Then type `bt` to get the backtrace:
 ![Backtrace](Pictures/Backtrace.png)
 
-## Notes
-<details>
-  <summary>Click to expand</summary>
-  This project is a demo for learning Markdown in GitHub. 📝
-</details>
+It looks like we are in infinite recursion of the Parser::getObj() as CVE-2019-13288 described. This results in a crash and can lead to a denial-of-service attack.
+</details> ```
 
 ## Reference
 Thanks to Antonio Morales for publishing the original materials on GitHub
