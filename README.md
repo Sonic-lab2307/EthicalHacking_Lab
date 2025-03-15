@@ -68,27 +68,31 @@ Result:
 If you go here without any errors, then your environment is ready to fuzz...
 
 ## Fuzzing
+Warning: I suggest to reproduce the crash by yourself. Refer [AFLplusplus](https://github.com/AFLplusplus/AFLplusplus) for starting point.
 
 <details>
-  <summary>Click to expand</summary>
+  <summary>Do not click...</summary>
 
 To fuzz Xpdf with AFL++, we needed to compile Xpdf with instrumentation so that AFL++ could track coverage. The fuzzing setup consisted of the following steps:
 
-First of all, we’re going to clean all previously compiled object files and executables
+
+### **Step 1: Clean Previously Compiled Files**
 ```
 rm -r $HOME/fuzzing_xpdf/install
 cd $HOME/fuzzing_xpdf/xpdf-3.02/
 make clean
 ```
 
-And now we’re going to build xpdf using the afl-clang-fast compiler. Refer [Fuzzing in Depth - AFL++ Documentation](https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md) for more compiler selection
+
+### **Step 2: Build Xpdf Using afl-clang-fast Compiler**
+Refer [Fuzzing in Depth - AFL++ Documentation](https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md) for more compiler selection
 ```
 export LLVM_CONFIG="llvm-config-16"
 CC=$HOME/AFLplusplus/afl-clang-fast CXX=$HOME/AFLplusplus/afl-clang-fast++ ./configure --prefix="$HOME/fuzzing_xpdf/install/"
 make
 make install
 ```
-Now, you can run the fuzzer with the following command:
+### **Step 3: Run the Fuzzer**
 ```
 afl-fuzz -i $HOME/fuzzing_xpdf/pdf_examples/ -o $HOME/fuzzing_xpdf/out/ -s 123 -- $HOME/fuzzing_xpdf/install/bin/pdftotext @@ $HOME/fuzzing_xpdf/output
 ```
@@ -99,16 +103,16 @@ Explanation of each option:
 * -s Sets a static random seed for reproducibility
 * @@ A placeholder in the target’s command line that AFL replaces with each input file name
 
-Essentially, the fuzzer will execute:$HOME/fuzzing_xpdf/install/bin/pdftotext <input-file-name> $HOME/fuzzing_xpdf/output for each input file.
+Essentially, the fuzzer will execute:`$HOME/fuzzing_xpdf/install/bin/pdftotext <input-file-name> $HOME/fuzzing_xpdf/output` for each input file.
 
 Depending on the power of your virtual machine, you will see the first hangs and crashes over time.
-You will see the ‘saved crashes’ value in red, indicating the number of crashes found. These crash files are stored in the $HOME/fuzzing_xpdf/out/ directory. You can stop the fuzzer after finding the first crash by press Ctrl+C.
+You will see the ‘saved crashes’ value in **red**, indicating the number of crashes found. These crash files are stored in the `$HOME/fuzzing_xpdf/out/` directory. You can stop the fuzzer after finding the first crash by press `Ctrl+C`.
 
 ![Fuzz result](Pictures/Fuzz_result.png)
 
 ## How to Reproduce the Crash
 
-To reproduce the crash, locate the file corresponding to the crash in the $HOME/fuzzing_xpdf/out/default/crashes directory.
+To reproduce the crash, locate the file corresponding to the crash in the `$HOME/fuzzing_xpdf/out/default/crashes` directory.
 
 In my case, the crash filename is id:000000,sig:11,src:000000,time:274008,execs:87328,op:havoc,rep:2
 
