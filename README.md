@@ -23,7 +23,7 @@ Verify AFL++ setup
 ```
 afl-fuzz
 ```
-![AFL++](AFL_setup_verify.png)
+![AFL++](Pictures/AFL_setup_verify.png)
 
 2. Setup XPDF 3.02
 
