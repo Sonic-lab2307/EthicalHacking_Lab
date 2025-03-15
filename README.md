@@ -25,7 +25,8 @@ afl-fuzz
 ```
   * The parameter set
     ![AFL++](Pictures/AFL_setup_verify.png)
-  
+<details>
+  <summary>Click to expand</summary>  
 2. Setup XPDF 3.02
 * Create a new directory for the project you want to fuzz:
 ```
@@ -66,7 +67,7 @@ Result:
 ![XPDF](Pictures/XPDF_setup_verify.png)
 
 If you go here without any errors, then your environment is ready to fuzz...
-
+</details>
 ## Screenshot
 ![Project Screenshot](screenshot.png)
 
