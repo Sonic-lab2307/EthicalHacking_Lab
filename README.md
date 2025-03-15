@@ -89,10 +89,11 @@ Now, you can run the fuzzer with the following command:
 afl-fuzz -i $HOME/fuzzing_xpdf/pdf_examples/ -o $HOME/fuzzing_xpdf/out/ -s 123 -- $HOME/fuzzing_xpdf/install/bin/pdftotext @@ $HOME/fuzzing_xpdf/output
 ```
 Explanation of each option:
--i Specifies the directory for input cases (example files)
--o Specifies the directory where AFL++ will store mutated files
--s Sets a static random seed for reproducibility
-@@ A placeholder in the target’s command line that AFL replaces with each input file name
+
+* -i Specifies the directory for input cases (example files)
+* -o Specifies the directory where AFL++ will store mutated files
+* -s Sets a static random seed for reproducibility
+* @@ A placeholder in the target’s command line that AFL replaces with each input file name
 
 Essentially, the fuzzer will execute:/home/kali/fuzzing_xpdf/install/bin/pdftotext <input-file-name> /home/kali/fuzzing_xpdf/outputfor each input file.
 
@@ -100,6 +101,16 @@ Depending on the power of your virtual machine, you will see the first hangs and
 You will see the ‘saved crashes’ value in red, indicating the number of crashes found. These crash files are stored in the /home/kali/fuzzing_xpdf/out/ directory. You can stop the fuzzer after finding the first crash by press Ctrl+C
 
 ![Fuzz result](Pictures/Fuzz_result.png)
+
+How to Reproduce the Crash
+To reproduce the crash, locate the file corresponding to the crash in the $HOME/fuzzing_xpdf/out/default/crashes directory.
+
+In my case, the crash filename is id:000000,sig:11,src:000000,time:274008,execs:87328,op:havoc,rep:2
+
+```
+$HOME/fuzzing_xpdf/install/bin/pdftotext "$HOME/fuzzing_xpdf/out/default/crashes/<your_filename>" "$HOME/fuzzing_xpdf/output"
+```
+![Crash](Pictures/Crash.png)
 
 
 ## Notes
