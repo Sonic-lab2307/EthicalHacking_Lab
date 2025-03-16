@@ -146,7 +146,7 @@ In my case, the output is:
 Then type `bt` to get the backtrace:
 ![Backtrace](Pictures/Backtrace.png)
 
-It looks like we are in infinite recursion of the Parser::getObj() as CVE-2019-13288 described. This results in a crash and can lead to a denial-of-service attack.
+It looks like we are in infinite recursion of the Parser::getObj() similar as CVE-2019-13288 described. We are successfully reproduce the crash which can lead to a denial-of-service attack.
 </details> ```
 
 ## Reference
