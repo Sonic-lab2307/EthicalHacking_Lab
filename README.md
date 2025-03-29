@@ -146,9 +146,13 @@ In my case, the output is:
 Then type `bt` to get the backtrace:
 ![Backtrace](Pictures/Backtrace.png)
 
-It looks like we are in infinite recursion of the Parser::getObj() similar as CVE-2019-13288 described. We are successfully reproduce the crash which can lead to a denial-of-service attack.
+It looks like we are in infinite recursion of the Parser::getObj() similar as **CVE-2019-13288** described. We are successfully reproduce the crash which can lead to a denial-of-service attack.
 </details> ```
 
-## Reference
-Thanks to Antonio Morales for publishing the original materials on GitHub
+## Attribution
+
+This lab task is adapted from the original materials by [Antonio Morales](https://github.com/antonio-morales/Fuzzing101), which are licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+Thanks to Antonio Morales for publishing the original materials on GitHub.
+Modifications have been made to the original content.
 
